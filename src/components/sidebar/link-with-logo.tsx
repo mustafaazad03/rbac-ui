@@ -88,7 +88,7 @@ const LinkWithLogo: React.FC<LinkWithLogoProps> = ({
             <Link
               href={item.link}
               className={`flex items-center px-4 py-2 text-sm transition-colors duration-200 hover:bg-gray-100
-                ${item.link === window?.location?.pathname ? 'text-primary-red font-semibold' : 'text-gray-600'}`}
+                ${item.link === (typeof window !== 'undefined' && window?.location?.pathname) ? 'text-primary-red font-semibold' : 'text-gray-600'}`}
             >
               {item.icon && (
                 <span className="mr-3 flex items-center justify-center w-5 h-5">

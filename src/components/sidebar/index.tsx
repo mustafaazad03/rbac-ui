@@ -11,6 +11,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
   
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const handleResize = () => {
       if (window.innerWidth < 1024) {
         setIsOpen(false);
