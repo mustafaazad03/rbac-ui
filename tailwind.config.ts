@@ -9,8 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        "dark-blue": "#091E42",
+        "light-blue": "#6B788E",
+        "fade-blue": "#C2C7D0",
+        "primary-red": "#9A1E1E",
+        "secondary-red": "#6A1039",
+        "dot-orange": "#93312B",
+        "fade-orange": "#FFF2EA",
+        "fade-primary-red": "#F9F5FF",
+        "fade-primary-red-2": "#F7E8EF",
+        "success-50": "#ECFDF3",
+        "success-500": "#12B76A",
+        "success-700": "#027A48",
+        "gray-bg": "#FAFBFB",
+        "gray-border": "#EAECF0"
       },
     },
   },
