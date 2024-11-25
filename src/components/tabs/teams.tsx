@@ -60,6 +60,8 @@ const TeamsTab = ({ initialData }: TeamsTabProps) => {
     );
   };
 
+  const AllowedFilters = ["status", "department", "size"];
+
   return (
     <>
       <FilteringSection
@@ -68,6 +70,7 @@ const TeamsTab = ({ initialData }: TeamsTabProps) => {
         handlingSearch={handleSearch}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
+        AllowedFilters={AllowedFilters}
       />
 
       {/* List View */}

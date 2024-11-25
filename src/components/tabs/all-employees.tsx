@@ -108,9 +108,11 @@ const AllEmployees = ({initialData}: AllEmployeesProps) => {
     setChecked(!checked && !indeterminate);
     setIndeterminate(false);
   };
+
+  const AllowedFilters = ["status", "teams", "type"];
   return (
     <>
-      <FilteringSection view={view} setView={(view) => setView(view)} handlingSearch={(value: string) => handleSearch(value)} activeFilters={activeFilters} setActiveFilters={setActiveFilters} />
+      <FilteringSection view={view} setView={(view) => setView(view)} handlingSearch={(value: string) => handleSearch(value)} activeFilters={activeFilters} setActiveFilters={setActiveFilters} AllowedFilters={AllowedFilters} />
       {view === 'list' && (
         <div className="mt-4 flow-root">
           <div className="-my-2 overflow-x-auto">

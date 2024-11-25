@@ -24,9 +24,10 @@ interface FilteringSectionProps {
     size?: string[];
     department?: string[];
   }>>;
+  AllowedFilters: string[];
 }
 
-const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setActiveFilters}: FilteringSectionProps) => {
+const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setActiveFilters, AllowedFilters}: FilteringSectionProps) => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   // Get active filter count
@@ -89,6 +90,7 @@ const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setAc
         onClose={() => setIsFilterModalOpen(false)}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
+        AllowedFilters={AllowedFilters}
       />
     </>
   )

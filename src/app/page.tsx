@@ -444,7 +444,7 @@ export default function Home() {
       lead: "Michelle Liu",
       description: "Maintains all project documentation and guides."
     }
-  ], []) as Team[];
+  ], [testEmployees]) as Team[];
 
   const tabs = useMemo(() => [
     {

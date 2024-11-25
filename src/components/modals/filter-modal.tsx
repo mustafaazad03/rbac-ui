@@ -20,19 +20,23 @@ interface FilterModalProps {
     size?: string[];
     department?: string[];
   }) => void;
+  AllowedFilters: string[];
 }
 
 const FilterModal = ({ 
   isOpen, 
   onClose, 
   activeFilters, 
-  setActiveFilters 
+  setActiveFilters,
+  AllowedFilters
 }: FilterModalProps) => {
   const [tempFilters, setTempFilters] = useState(activeFilters);
 
   const STATUS_OPTIONS = ['Active', 'Inactive'];
   const TYPE_OPTIONS = ['Full time', 'Part time', 'Contract', 'Associate'];
   const TEAM_OPTIONS = ['Engineering', 'Design', 'Product', 'Marketing', 'Sales', 'Support'];
+  const SIZE_OPTIONS = ['Small', 'Medium', 'Large'];
+  const DEPARTMENT_OPTIONS = ['Engineering', 'Design', 'Product', 'Marketing', 'Sales', 'Support'];
 
   const toggleFilter = (category: 'status' | 'teams' | 'type' | 'size' | 'department' , value: string) => {
     setTempFilters(prev => ({
@@ -65,12 +69,14 @@ const FilterModal = ({
       <div className="bg-white rounded-lg w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Filters</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 absolute top-[16%] right-[35%]">
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 relative bottom-12 left-16">
             <Image src="/icons/cross.svg" width={20} height={20} alt="Close" />
           </button>
         </div>
 
         {/* Status Section */}
+        {
+          AllowedFilters.includes('status') && (
         <div className="mb-6">
           <h3 className="text-sm font-medium mb-3">Status</h3>
           <div className="space-y-2">
@@ -87,8 +93,12 @@ const FilterModal = ({
             ))}
           </div>
         </div>
+          )
+        }
 
         {/* Teams Section */}
+        {
+          AllowedFilters.includes('teams') && (
         <div className="mb-6">
           <h3 className="text-sm font-medium mb-3">Teams</h3>
           <div className="grid grid-cols-2 gap-2">
@@ -105,8 +115,12 @@ const FilterModal = ({
             ))}
           </div>
         </div>
+          )
+        }
 
         {/* Employment Type Section */}
+        {
+          AllowedFilters.includes('type') && (
         <div className="mb-6">
           <h3 className="text-sm font-medium mb-3">Employment Type</h3>
           <div className="space-y-2">
@@ -123,101 +137,52 @@ const FilterModal = ({
             ))}
           </div>
         </div>
+          )
+        }
 
-        {/* Size Type Section */}
+        {/* Size option */}
+        {
+          AllowedFilters.includes('size') && (
         <div className="mb-6">
-          <h3 className="text-sm font-medium mb-3">Size</h3>
+          <h3 className="text-sm font-medium mb-3">Size Type</h3>
           <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.size?.includes('Small') ?? false}
-                onChange={() => toggleFilter('size', 'Small')}
-              />
-              <span className="ml-2 text-sm">Small</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.size?.includes('Medium') ?? false}
-                onChange={() => toggleFilter('size', 'Medium')}
-              />
-              <span className="ml-2 text-sm">Medium</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.size?.includes('Large') ?? false}
-                onChange={() => toggleFilter('size', 'Large')}
-              />
-              <span className="ml-2 text-sm">Large</span>
-            </label>
+            {SIZE_OPTIONS.map((size) => (
+              <label key={size} className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-indigo-600"
+                  checked={tempFilters.type?.includes(size) ?? false}
+                  onChange={() => toggleFilter('size', size)}
+                />
+                <span className="ml-2 text-sm">{size}</span>
+              </label>
+            ))}
           </div>
         </div>
+          )
+        }
 
         {/* Department Type Section */}
+        {
+          AllowedFilters.includes('department') && (
         <div className="mb-6">
-          <h3 className="text-sm font-medium mb-3">Department</h3>
+          <h3 className="text-sm font-medium mb-3">Department Type</h3>
           <div className="space-y-2">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Engineering') ?? false}
-                onChange={() => toggleFilter('department', 'Engineering')}
-              />
-              <span className="ml-2 text-sm">Engineering</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Design') ?? false}
-                onChange={() => toggleFilter('department', 'Design')}
-              />
-              <span className="ml-2 text-sm">Design</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Product') ?? false}
-                onChange={() => toggleFilter('department', 'Product')}
-              />
-              <span className="ml-2 text-sm">Product</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Marketing') ?? false}
-                onChange={() => toggleFilter('department', 'Marketing')}
-              />
-              <span className="ml-2 text-sm">Marketing</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Sales') ?? false}
-                onChange={() => toggleFilter('department', 'Sales')}
-              />
-              <span className="ml-2 text-sm">Sales</span>
-            </label>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 text-indigo-600"
-                checked={tempFilters.department?.includes('Support') ?? false}
-                onChange={() => toggleFilter('department', 'Support')}
-              />
-              <span className="ml-2 text-sm">Support</span>
-            </label>
+            {DEPARTMENT_OPTIONS.map((dept) => (
+              <label key={dept} className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-indigo-600"
+                  checked={tempFilters.type?.includes(dept) ?? false}
+                  onChange={() => toggleFilter('department', dept)}
+                />
+                <span className="ml-2 text-sm">{dept}</span>
+              </label>
+            ))}
           </div>
         </div>
+          )
+        }
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
