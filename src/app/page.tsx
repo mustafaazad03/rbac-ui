@@ -3,6 +3,7 @@
 import Header from '@/components/header';
 import Tabs, { TabItem } from '@/components/tabs';
 import AllEmployees, { Employee } from '@/components/tabs/all-employees';
+import Teams, { Team } from '@/components/tabs/teams';
 import { useEffect, useMemo } from 'react';
 
 export default function Home() {
@@ -238,33 +239,225 @@ export default function Home() {
     }
   ], []) as Employee[];
 
+  const testTeams = useMemo(() => [
+    {
+      id: "team001",
+      name: "Engineering",
+      members: [
+        testEmployees.find(e => e.id === "emp001")!,
+        testEmployees.find(e => e.id === "emp002")!,
+        testEmployees.find(e => e.id === "emp004")!,
+        testEmployees.find(e => e.id === "emp008")!,
+        testEmployees.find(e => e.id === "emp012")!,
+        testEmployees.find(e => e.id === "emp016")!,
+        testEmployees.find(e => e.id === "emp020")!
+      ],
+      lead: "Sarah Johnson",
+      description: "Handles all engineering tasks and development."
+    },
+    {
+      id: "team002",
+      name: "Design",
+      members: [
+        testEmployees.find(e => e.id === "emp002")!,
+        testEmployees.find(e => e.id === "emp005")!,
+        testEmployees.find(e => e.id === "emp011")!,
+        testEmployees.find(e => e.id === "emp018")!
+      ],
+      lead: "Michael Chen",
+      description: "Responsible for designing user interfaces and experiences."
+    },
+    {
+      id: "team003",
+      name: "Marketing",
+      members: [
+        testEmployees.find(e => e.id === "emp003")!,
+        testEmployees.find(e => e.id === "emp009")!,
+        testEmployees.find(e => e.id === "emp018")!
+      ],
+      lead: "Emily Rodriguez",
+      description: "Manages marketing strategies and campaigns."
+    },
+    {
+      id: "team004",
+      name: "Sales",
+      members: [
+        testEmployees.find(e => e.id === "emp006")!,
+        testEmployees.find(e => e.id === "emp013")!
+      ],
+      lead: "David Thompson",
+      description: "Focuses on sales and client acquisitions."
+    },
+    {
+      id: "team005",
+      name: "Support",
+      members: [
+        testEmployees.find(e => e.id === "emp007")!,
+        testEmployees.find(e => e.id === "emp017")!
+      ],
+      lead: "Anna Martinez",
+      description: "Provides customer support and success."
+    },
+    {
+      id: "team006",
+      name: "Product",
+      members: [
+        testEmployees.find(e => e.id === "emp010")!,
+        testEmployees.find(e => e.id === "emp014")!
+      ],
+      lead: "Robert Taylor",
+      description: "Oversees product development and management."
+    },
+    {
+      id: "team007",
+      name: "HR",
+      members: [
+        testEmployees.find(e => e.id === "emp015")!
+      ],
+      lead: "Laura Silva",
+      description: "Handles human resources and recruitment."
+    },
+    {
+      id: "team008",
+      name: "Quality Assurance",
+      members: [
+        testEmployees.find(e => e.id === "emp016")!
+      ],
+      lead: "Alex Wong",
+      description: "Ensures product quality and testing."
+    },
+    {
+      id: "team009",
+      name: "Research",
+      members: [
+        testEmployees.find(e => e.id === "emp005")!
+      ],
+      lead: "Lisa Kim",
+      description: "Conducts market and product research."
+    },
+    {
+      id: "team010",
+      name: "Infrastructure",
+      members: [
+        testEmployees.find(e => e.id === "emp008")!,
+        testEmployees.find(e => e.id === "emp020")!
+      ],
+      lead: "Thomas Lee",
+      description: "Manages IT infrastructure and deployments."
+    },
+    {
+      id: "team011",
+      name: "Analytics",
+      members: [
+        testEmployees.find(e => e.id === "emp014")!,
+        testEmployees.find(e => e.id === "emp019")!
+      ],
+      lead: "Daniel Kim",
+      description: "Handles data analysis and insights."
+    },
+    {
+      id: "team012",
+      name: "Documentation",
+      members: [
+        testEmployees.find(e => e.id === "emp019")!
+      ],
+      lead: "Michelle Liu",
+      description: "Creates and maintains product documentation."
+    },
+    {
+      id: "team013",
+      name: "Customer Success",
+      members: [
+        testEmployees.find(e => e.id === "emp007")!,
+        testEmployees.find(e => e.id === "emp017")!
+      ],
+      lead: "Jessica Adams",
+      description: "Ensures customer satisfaction and retention."
+    },
+    {
+      id: "team014",
+      name: "Backend",
+      members: [
+        testEmployees.find(e => e.id === "emp001")!,
+        testEmployees.find(e => e.id === "emp012")!,
+        testEmployees.find(e => e.id === "emp020")!
+      ],
+      lead: "James Wilson",
+      description: "Develops and maintains backend systems."
+    },
+    {
+      id: "team015",
+      name: "Frontend",
+      members: [
+        testEmployees.find(e => e.id === "emp004")!,
+        testEmployees.find(e => e.id === "emp020")!
+      ],
+      lead: "James Wilson",
+      description: "Develops and maintains frontend interfaces."
+    },
+    {
+      id: "team016",
+      name: "Security",
+      members: [
+        testEmployees.find(e => e.id === "emp020")!
+      ],
+      lead: "John Davis",
+      description: "Oversees security protocols and measures."
+    },
+    {
+      id: "team017",
+      name: "Brand",
+      members: [
+        testEmployees.find(e => e.id === "emp011")!,
+        testEmployees.find(e => e.id === "emp018")!,
+        testEmployees.find(e => e.id === "emp003")!
+      ],
+      lead: "Rachel Green",
+      description: "Manages brand strategy and identity."
+    },
+    {
+      id: "team018",
+      name: "Mobile",
+      members: [
+        testEmployees.find(e => e.id === "emp002")!,
+        testEmployees.find(e => e.id === "emp010")!
+      ],
+      lead: "Thomas Lee",
+      description: "Develops and maintains mobile applications."
+    },
+    {
+      id: "team019",
+      name: "Enterprise",
+      members: [
+        testEmployees.find(e => e.id === "emp006")!,
+        testEmployees.find(e => e.id === "emp017")!
+      ],
+      lead: "David Thompson",
+      description: "Handles enterprise-level projects and clients."
+    },
+    {
+      id: "team020",
+      name: "Documentation",
+      members: [
+        testEmployees.find(e => e.id === "emp019")!
+      ],
+      lead: "Michelle Liu",
+      description: "Maintains all project documentation and guides."
+    }
+  ], []) as Team[];
+
   const tabs = useMemo(() => [
     {
       name: 'All Employees',
       href: '#all-employees',
       content: <AllEmployees initialData={testEmployees} />,
     },
-    // Teams
     {
       name: 'Teams',
       href: '#teams',
-      content: (
-        <div className="p-4 bg-white rounded-lg shadow">
-          <h2 className="text-lg font-medium">Teams</h2>
-        </div>
-      ),
-    },
-    // Roles
-    {
-      name: 'Roles',
-      href: '#roles',
-      content: (
-        <div className="p-4 bg-white rounded-lg shadow">
-          <h2 className="text-lg font-medium">Roles</h2>
-        </div>
-      ),
-    },
-  ], [testEmployees]);
+      content: <Teams initialData={testTeams} />,
+    }
+  ], [testEmployees, testTeams]);
 
   const handleTabChange = (tab: TabItem) => {
     if (typeof window !== 'undefined') window.history.pushState({}, '', tab.href);

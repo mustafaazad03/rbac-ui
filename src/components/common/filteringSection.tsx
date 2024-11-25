@@ -11,14 +11,18 @@ interface FilteringSectionProps {
   setView: (view: View) => void;
   handlingSearch: (value: string) => void;
   activeFilters: {
-    status: string[];
-    teams: string[];
-    type: string[];
+    status?: string[];
+    teams?: string[];
+    type?: string[];
+    size?: string[];
+    department?: string[];
   };
   setActiveFilters: React.Dispatch<React.SetStateAction<{
-    status: string[];
-    teams: string[];
-    type: string[];
+    status?: string[];
+    teams?: string[];
+    type?: string[];
+    size?: string[];
+    department?: string[];
   }>>;
 }
 

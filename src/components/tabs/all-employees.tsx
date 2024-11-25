@@ -27,10 +27,12 @@ const AllEmployees = ({initialData}: AllEmployeesProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEmployees, setSelectedEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState(initialData);
-  const [activeFilters, setActiveFilters] = useState({
+  const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>({
     status: [] as string[],
     teams: [] as string[],
     type: [] as string[],
+    size: [] as string[],
+    department: [] as string[]
   });
 
   const checkbox = useRef<HTMLInputElement>(null);
