@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React from 'react';
 
 interface ButtonProps {
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'ghost';
   icon?: string;
   onclick?: () => void;
   children: React.ReactNode;
@@ -17,10 +17,11 @@ const Button = ({
   children,
   className = ''
 }: ButtonProps) => {
-  const baseStyles = 'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors';
+  const baseStyles = 'flex items-center gap-2 rounded-lg font-medium transition-colors';
   const variantStyles = {
     primary: 'bg-purple-800 text-white hover:bg-purple-900',
-    secondary: 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+    secondary: 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200',
+    ghost: 'bg-transparent text-gray-700 hover:bg-gray-50'
   };
 
   return (

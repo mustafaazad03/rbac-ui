@@ -41,6 +41,7 @@ const Header = ({
             variant={action.variant}
             icon={action.icon}
             onclick={action.onclick}
+            className='px-4 py-2'
           >
             {action.label}
           </Button>
