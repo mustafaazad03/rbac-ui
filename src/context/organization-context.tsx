@@ -10,7 +10,6 @@ export interface Permission {
   description: string;
   isGranted: boolean;
 }
-
 export interface Role {
   label: string;
   description: string;
@@ -19,7 +18,6 @@ export interface Role {
   users: User[];
   permissions?: Permission[];
 }
-
 export interface Team {
   id: string;
   name: string;
@@ -332,9 +330,31 @@ export const OrganizationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const updateEmployee = useCallback((employeeId: string, updates: Partial<User>) => {
     setEmployees(prev => 
       prev.map(emp => 
-        emp.id === employeeId ? { ...emp, ...updates } : emp
+        emp.id === employeeId 
+          ? { ...emp, ...updates } 
+          : emp
       )
     );
+  
+    // Update employee in teams
+    setTeams(prev => prev.map(team => ({
+      ...team,
+      members: team.members.map(member => 
+        member.id === employeeId 
+          ? { ...member, ...updates } 
+          : member
+      )
+    })));
+  
+    // Update employee in roles
+    setRoles(prev => prev.map(role => ({
+      ...role,
+      users: role.users.map(user => 
+        user.id === employeeId 
+          ? { ...user, ...updates } 
+          : user
+      )
+    })));
   }, []);
 
   const removeEmployee = useCallback((employeeId: string) => {

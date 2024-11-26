@@ -46,7 +46,7 @@ const LinkWithLogo: React.FC<LinkWithLogoProps> = ({
         href={link}
         onClick={toggleNesting}
         className={`flex items-center px-4 py-3 text-sm transition-colors duration-200 hover:bg-gray-100 w-full
-          ${isActive ? 'bg-primary-red text-white hover:bg-secondary-red rounded-3xl rounded-tl-none' : 'text-gray-700'}
+          ${isActive ? 'bg-primary-red text-white hover:bg-secondary-red rounded-3xl rounded-tl-none' : 'text-gray-700 rounded-3xl rounded-tl-none'}
           ${nesting && nesting.length > 0 ? 'justify-between' : ''}`}
       >
         <div className="flex items-center gap-3">

@@ -86,7 +86,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
               <div className={`
                 relative w-11 h-6 bg-gray-200 rounded-full peer 
                 ${permission.isGranted ? 'peer-checked:bg-secondary-red' : ''}
-                peer-focus:ring-4 peer-focus:ring-redbg-secondary-red 
+                peer-focus:ring-4 bg-secondary-red 
                 dark:peer-focus:ring-secondary-red dark:peer-focus:ring-opacity-50 
                 after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
                 after:bg-white after:border-gray-300 after:border after:rounded-full 
@@ -268,7 +268,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
           <div className="w-12 h-12 px-3 pt-2 pb-3 bg-[#ffe6ef] rounded-[28px] border-8 border-[#feeeed] justify-center items-center inline-flex">
             <div className="grow shrink basis-0 h-6 justify-center items-center inline-flex">
               <div className="w-6 h-6 relative">
-                <Image src="/icons/briefcaseColor.svg" width={24} height={24} alt="Heart" />
+                <Image src={isEmployee ? "/icons/user.svg" : "/icons/briefcaseColor.svg"} width={24} height={24} alt="Heart" />
               </div>
             </div>
           </div>

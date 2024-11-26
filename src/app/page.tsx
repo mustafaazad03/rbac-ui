@@ -16,10 +16,12 @@ export default function Home() {
     employees, 
     addEmployee,
     teams,
-    roles
+    roles,
+    updateEmployee,
   } = useOrganization();
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState<'export' | 'add' | null>(null);
+  const [modalType, setModalType] = useState<'export' | 'add' | 'edit' | null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<User | null>(null);
 
   const handleExport = () => {
     setModalType('export');
@@ -87,11 +89,22 @@ export default function Home() {
       };
       
       addEmployee(newEmployeeData);
+    } else if (modalType === 'edit' && selectedEmployee) {
+      const updatedEmployeeData: Partial<User> = {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        department: formData.department,
+        type: formData.type as 'Full time' | 'Part time' | 'Contract' | 'Associate',
+      };
+      
+      updateEmployee(selectedEmployee.id, updatedEmployeeData);
     }
     
     // Close modal
     setShowModal(false);
     setModalType(null);
+    setSelectedEmployee(null);
   };
 
   const tabs = useMemo(() => [
@@ -152,7 +165,7 @@ export default function Home() {
               <div className="w-12 h-12 px-3 pt-2 pb-3 bg-[#ffe6ef] rounded-[28px] border-8 border-[#feeeed] justify-center items-center inline-flex">
                 <div className="grow shrink basis-0 h-6 justify-center items-center inline-flex">
                   <div className="w-6 h-6 relative">
-                    <Image src="/icons/briefcaseColor.svg" width={24} height={24} alt="Export" />
+                    <Image src="/icons/user.svg" width={24} height={24} alt="Export" />
                   </div>
                 </div>
               </div>

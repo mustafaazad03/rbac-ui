@@ -6,6 +6,16 @@ import LogoDisplay from './logo-display';
 import LinkWithLogo from './link-with-logo';
 import Image from 'next/image';
 
+type NavigationItems = {
+  link: string;
+  icon: string;
+  title: string;
+  nesting?: {
+    link: string;
+    title: string;
+  }[];
+}
+
 const Sidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(true);
@@ -37,22 +47,22 @@ const Sidebar = () => {
       icon: '/icons/briefcase.svg',
       title: 'Roles'
     },
-    {
-      link: '/employees',
-      icon: '/icons/3 User.svg',
-      title: 'Employees',
-      nesting: [
-        {
-          link: '/employees/all',
-          title: 'All Employees'
-        },
-        {
-          link: '/employees/recent',
-          title: 'Recent hires'
-        }
-      ]
-    }
-  ];
+    // {
+    //   link: '/employees',
+    //   icon: '/icons/3 User.svg',
+    //   title: 'Employees',
+    //   nesting: [
+    //     {
+    //       link: '/employees/all',
+    //       title: 'All Employees'
+    //     },
+    //     {
+    //       link: '/employees/recent',
+    //       title: 'Recent hires'
+    //     }
+    //   ]
+    // }
+  ] as NavigationItems[];
 
   return (
     <>
@@ -105,7 +115,7 @@ const Sidebar = () => {
                 link={item.link}
                 icon={item.icon}
                 title={item.title}
-                nesting={item.nesting}
+                nesting={item?.nesting}
                 isActive={pathname === item.link || pathname?.startsWith(`${item.link}/`)}
               />
             ))}
