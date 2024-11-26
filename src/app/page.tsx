@@ -1,18 +1,40 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
+import employee from '@/data/employee.json';
+import { User } from '@/components/ui/user-chips';
 import Header from '@/components/header';
 import Tabs, { TabItem } from '@/components/tabs';
-import AllEmployees, { Employee } from '@/components/tabs/all-employees';
-import Teams, { Team } from '@/components/tabs/teams';
-import { useEffect, useMemo } from 'react';
+import AllEmployees from '@/components/tabs/all-employees';
+import TeamsTab, { Team } from '@/components/tabs/teams';
+import Image from 'next/image';
+import DynamicModal, { FormField } from '@/components/modals/dynamic-modal';
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [modalType, setModalType] = useState<'export' | 'add' | null>(null);
+  const [employeeData, setEmployeeData] = useState<User[]>(employee as User[]);
+  const [newEmployee, setNewEmployee] = useState({
+    name: '',
+    email: '',
+    role: '',
+    department: ''
+  });
+
   const handleExport = () => {
-    console.log('Exporting...');
+    setModalType('export');
+    setShowModal(true);
   };
 
   const handleAddEmployee = () => {
-    console.log('Adding new employee...');
+    setModalType('add');
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setModalType(null);
+    setNewEmployee({ name: '', email: '', role: '', department: '' });
   };
 
   const headerActions = [
@@ -30,227 +52,117 @@ export default function Home() {
     }
   ];
 
-  const testEmployees = useMemo(() => [
+  const handleExportSubmit = () => {
+    const data = JSON.stringify(employeeData, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'employees.json';
+    link.click();
+    handleModalClose();
+  };
+
+  const employeeCreationFields: FormField[] = [
     {
-      id: "emp001",
-      name: "Sarah Johnson",
-      email: "sarah.johnson@company.com",
-      employeeId: "EMP-2024-001",
-      role: "Senior Software Engineer",
-      status: "Active",
-      teams: ["Engineering", "Backend"],
-      type: "Full time",
-      avatar: ""
+      id: 'name',
+      label: 'Full Name',
+      type: 'text',
+      required: true,
+      placeholder: 'Enter full name',
+      validation: (value: string) => 
+        value.length < 2 ? 'Name must be at least 2 characters' : null
     },
     {
-      id: "emp002",
-      name: "Michael Chen",
-      email: "michael.chen@company.com",
-      employeeId: "EMP-2024-002",
-      role: "Product Designer",
-      status: "Active",
-      teams: ["Design", "Mobile"],
-      type: "Full time",
-      avatar: ""
+      id: 'email',
+      label: 'Email Address',
+      type: 'email',
+      required: true,
+      placeholder: 'Enter email address',
+      validation: (value: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return !emailRegex.test(value) ? 'Please enter a valid email address' : null;
+      }
     },
     {
-      id: "emp003",
-      name: "Emily Rodriguez",
-      email: "emily.r@company.com",
-      employeeId: "EMP-2024-003",
-      role: "Marketing Manager",
-      status: "Active",
-      teams: ["Marketing", "Brand"],
-      type: "Full time"
+      id: 'role',
+      label: 'Role',
+      type: 'text',
+      required: true,
+      placeholder: 'Enter employee role',
     },
     {
-      id: "emp004",
-      name: "James Wilson",
-      email: "james.w@company.com",
-      employeeId: "EMP-2024-004",
-      role: "Frontend Developer",
-      status: "Active",
-      teams: ["Engineering", "Frontend"],
-      type: "Contract"
+      id: 'department',
+      label: 'Department',
+      type: 'select',
+      required: true,
+      options: [
+        { value: 'Engineering', label: 'Engineering' },
+        { value: 'Design', label: 'Design' },
+        { value: 'Marketing', label: 'Marketing' },
+        { value: 'Sales', label: 'Sales' },
+        { value: 'HR', label: 'HR' },
+        { value: 'Finance', label: 'Finance' },
+        { value: 'Support', label: 'Support' },
+        { value: 'Product', label: 'Product' }
+      ]
     },
     {
-      id: "emp005",
-      name: "Lisa Kim",
-      email: "lisa.kim@company.com",
-      employeeId: "EMP-2024-005",
-      role: "UX Researcher",
-      status: "Inactive",
-      teams: ["Design", "Research"],
-      type: "Part time"
-    },
-    {
-      id: "emp006",
-      name: "David Thompson",
-      email: "david.t@company.com",
-      employeeId: "EMP-2024-006",
-      role: "Sales Director",
-      status: "Active",
-      teams: ["Sales", "Enterprise"],
-      type: "Full time",
-      avatar: ""
-    },
-    {
-      id: "emp007",
-      name: "Anna Martinez",
-      email: "anna.m@company.com",
-      employeeId: "EMP-2024-007",
-      role: "Support Specialist",
-      status: "Active",
-      teams: ["Support", "Customer Success"],
-      type: "Full time"
-    },
-    {
-      id: "emp008",
-      name: "Thomas Lee",
-      email: "thomas.l@company.com",
-      employeeId: "EMP-2024-008",
-      role: "DevOps Engineer",
-      status: "Active",
-      teams: ["Engineering", "Infrastructure"],
-      type: "Full time"
-    },
-    {
-      id: "emp009",
-      name: "Maria Garcia",
-      email: "maria.g@company.com",
-      employeeId: "EMP-2024-009",
-      role: "Content Writer",
-      status: "Active",
-      teams: ["Marketing", "Content"],
-      type: "Contract"
-    },
-    {
-      id: "emp010",
-      name: "Robert Taylor",
-      email: "robert.t@company.com",
-      employeeId: "EMP-2024-010",
-      role: "Product Manager",
-      status: "Active",
-      teams: ["Product", "Mobile"],
-      type: "Full time",
-      avatar: ""
-    },
-    {
-      id: "emp011",
-      name: "Sophie Brown",
-      email: "sophie.b@company.com",
-      employeeId: "EMP-2024-011",
-      role: "UI Designer",
-      status: "Active",
-      teams: ["Design", "Brand"],
-      type: "Associate"
-    },
-    {
-      id: "emp012",
-      name: "Kevin Patel",
-      email: "kevin.p@company.com",
-      employeeId: "EMP-2024-012",
-      role: "Backend Developer",
-      status: "Inactive",
-      teams: ["Engineering", "Backend"],
-      type: "Full time"
-    },
-    {
-      id: "emp013",
-      name: "Rachel Green",
-      email: "rachel.g@company.com",
-      employeeId: "EMP-2024-013",
-      role: "Sales Representative",
-      status: "Active",
-      teams: ["Sales", "SMB"],
-      type: "Full time"
-    },
-    {
-      id: "emp014",
-      name: "Daniel Kim",
-      email: "daniel.k@company.com",
-      employeeId: "EMP-2024-014",
-      role: "Data Analyst",
-      status: "Active",
-      teams: ["Product", "Analytics"],
-      type: "Part time"
-    },
-    {
-      id: "emp015",
-      name: "Laura Silva",
-      email: "laura.s@company.com",
-      employeeId: "EMP-2024-015",
-      role: "HR Manager",
-      status: "Active",
-      teams: ["HR", "Recruiting"],
-      type: "Full time",
-      avatar: ""
-    },
-    {
-      id: "emp016",
-      name: "Alex Wong",
-      email: "alex.w@company.com",
-      employeeId: "EMP-2024-016",
-      role: "QA Engineer",
-      status: "Active",
-      teams: ["Engineering", "Quality"],
-      type: "Contract"
-    },
-    {
-      id: "emp017",
-      name: "Jessica Adams",
-      email: "jessica.a@company.com",
-      employeeId: "EMP-2024-017",
-      role: "Customer Success Manager",
-      status: "Active",
-      teams: ["Support", "Enterprise"],
-      type: "Full time"
-    },
-    {
-      id: "emp018",
-      name: "Ryan Murphy",
-      email: "ryan.m@company.com",
-      employeeId: "EMP-2024-018",
-      role: "Graphic Designer",
-      status: "Inactive",
-      teams: ["Design", "Marketing"],
-      type: "Associate"
-    },
-    {
-      id: "emp019",
-      name: "Michelle Liu",
-      email: "michelle.l@company.com",
-      employeeId: "EMP-2024-019",
-      role: "Technical Writer",
-      status: "Active",
-      teams: ["Engineering", "Documentation"],
-      type: "Part time"
-    },
-    {
-      id: "emp020",
-      name: "John Davis",
-      email: "john.d@company.com",
-      employeeId: "EMP-2024-020",
-      role: "Security Engineer",
-      status: "Active",
-      teams: ["Engineering", "Security"],
-      type: "Full time",
-      avatar: ""
+      id: 'type',
+      label: 'Employment Type',
+      type: 'select',
+      required: true,
+      options: [
+        { value: 'Full time', label: 'Full Time' },
+        { value: 'Part time', label: 'Part Time' },
+        { value: 'Contract', label: 'Contract' },
+        { value: 'Freelance', label: 'Freelance' }
+      ]
     }
-  ], []) as Employee[];
+  ];
+
+  const handleConfirmEmployeeAction = (
+    selectedUsers: User[], 
+    formData: Record<string, string>
+  ) => {
+    if (modalType === 'add') {
+      // Create new employee
+      const validTypes = ['Full time', 'Contract', 'Part time', 'Associate'] as const;
+      type EmployeeType = typeof validTypes[number];
+      
+      const isValidType = (type: string): type is EmployeeType => 
+        validTypes.includes(type as EmployeeType);
+      
+      const newEmployeeData: User = {
+        id: `emp${String(employeeData.length + 1).padStart(3, '0')}`,
+        employeeId: `emp${String(employeeData.length + 1).padStart(3, '0')}`,
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+        department: formData.department,
+        status: 'Active',
+        teams: [],
+        type: isValidType(formData.type) ? formData.type : 'Full time',
+        avatar: ''
+      };
+      
+      setEmployeeData(prev => [...prev, newEmployeeData]);
+    }
+    handleModalClose();
+  };
 
   const testTeams = useMemo(() => [
     {
       id: "team001",
       name: "Engineering",
       members: [
-        testEmployees.find(e => e.id === "emp001")!,
-        testEmployees.find(e => e.id === "emp002")!,
-        testEmployees.find(e => e.id === "emp004")!,
-        testEmployees.find(e => e.id === "emp008")!,
-        testEmployees.find(e => e.id === "emp012")!,
-        testEmployees.find(e => e.id === "emp016")!,
-        testEmployees.find(e => e.id === "emp020")!
+        employeeData.find(e => e.id === "emp001")!,
+        employeeData.find(e => e.id === "emp002")!,
+        employeeData.find(e => e.id === "emp004")!,
+        employeeData.find(e => e.id === "emp008")!,
+        employeeData.find(e => e.id === "emp012")!,
+        employeeData.find(e => e.id === "emp016")!,
+        employeeData.find(e => e.id === "emp020")!
       ],
       lead: "Sarah Johnson",
       description: "Handles all engineering tasks and development."
@@ -259,10 +171,10 @@ export default function Home() {
       id: "team002",
       name: "Design",
       members: [
-        testEmployees.find(e => e.id === "emp002")!,
-        testEmployees.find(e => e.id === "emp005")!,
-        testEmployees.find(e => e.id === "emp011")!,
-        testEmployees.find(e => e.id === "emp018")!
+        employeeData.find(e => e.id === "emp002")!,
+        employeeData.find(e => e.id === "emp005")!,
+        employeeData.find(e => e.id === "emp011")!,
+        employeeData.find(e => e.id === "emp018")!
       ],
       lead: "Michael Chen",
       description: "Responsible for designing user interfaces and experiences."
@@ -271,9 +183,9 @@ export default function Home() {
       id: "team003",
       name: "Marketing",
       members: [
-        testEmployees.find(e => e.id === "emp003")!,
-        testEmployees.find(e => e.id === "emp009")!,
-        testEmployees.find(e => e.id === "emp018")!
+        employeeData.find(e => e.id === "emp003")!,
+        employeeData.find(e => e.id === "emp009")!,
+        employeeData.find(e => e.id === "emp018")!
       ],
       lead: "Emily Rodriguez",
       description: "Manages marketing strategies and campaigns."
@@ -282,8 +194,8 @@ export default function Home() {
       id: "team004",
       name: "Sales",
       members: [
-        testEmployees.find(e => e.id === "emp006")!,
-        testEmployees.find(e => e.id === "emp013")!
+        employeeData.find(e => e.id === "emp006")!,
+        employeeData.find(e => e.id === "emp013")!
       ],
       lead: "David Thompson",
       description: "Focuses on sales and client acquisitions."
@@ -292,8 +204,8 @@ export default function Home() {
       id: "team005",
       name: "Support",
       members: [
-        testEmployees.find(e => e.id === "emp007")!,
-        testEmployees.find(e => e.id === "emp017")!
+        employeeData.find(e => e.id === "emp007")!,
+        employeeData.find(e => e.id === "emp017")!
       ],
       lead: "Anna Martinez",
       description: "Provides customer support and success."
@@ -302,8 +214,8 @@ export default function Home() {
       id: "team006",
       name: "Product",
       members: [
-        testEmployees.find(e => e.id === "emp010")!,
-        testEmployees.find(e => e.id === "emp014")!
+        employeeData.find(e => e.id === "emp010")!,
+        employeeData.find(e => e.id === "emp014")!
       ],
       lead: "Robert Taylor",
       description: "Oversees product development and management."
@@ -312,7 +224,7 @@ export default function Home() {
       id: "team007",
       name: "HR",
       members: [
-        testEmployees.find(e => e.id === "emp015")!
+        employeeData.find(e => e.id === "emp015")!
       ],
       lead: "Laura Silva",
       description: "Handles human resources and recruitment."
@@ -321,7 +233,7 @@ export default function Home() {
       id: "team008",
       name: "Quality Assurance",
       members: [
-        testEmployees.find(e => e.id === "emp016")!
+        employeeData.find(e => e.id === "emp016")!
       ],
       lead: "Alex Wong",
       description: "Ensures product quality and testing."
@@ -330,7 +242,7 @@ export default function Home() {
       id: "team009",
       name: "Research",
       members: [
-        testEmployees.find(e => e.id === "emp005")!
+        employeeData.find(e => e.id === "emp005")!
       ],
       lead: "Lisa Kim",
       description: "Conducts market and product research."
@@ -339,8 +251,8 @@ export default function Home() {
       id: "team010",
       name: "Infrastructure",
       members: [
-        testEmployees.find(e => e.id === "emp008")!,
-        testEmployees.find(e => e.id === "emp020")!
+        employeeData.find(e => e.id === "emp008")!,
+        employeeData.find(e => e.id === "emp020")!
       ],
       lead: "Thomas Lee",
       description: "Manages IT infrastructure and deployments."
@@ -349,8 +261,8 @@ export default function Home() {
       id: "team011",
       name: "Analytics",
       members: [
-        testEmployees.find(e => e.id === "emp014")!,
-        testEmployees.find(e => e.id === "emp019")!
+        employeeData.find(e => e.id === "emp014")!,
+        employeeData.find(e => e.id === "emp019")!
       ],
       lead: "Daniel Kim",
       description: "Handles data analysis and insights."
@@ -359,7 +271,7 @@ export default function Home() {
       id: "team012",
       name: "Documentation",
       members: [
-        testEmployees.find(e => e.id === "emp019")!
+        employeeData.find(e => e.id === "emp019")!
       ],
       lead: "Michelle Liu",
       description: "Creates and maintains product documentation."
@@ -368,8 +280,8 @@ export default function Home() {
       id: "team013",
       name: "Customer Success",
       members: [
-        testEmployees.find(e => e.id === "emp007")!,
-        testEmployees.find(e => e.id === "emp017")!
+        employeeData.find(e => e.id === "emp007")!,
+        employeeData.find(e => e.id === "emp017")!
       ],
       lead: "Jessica Adams",
       description: "Ensures customer satisfaction and retention."
@@ -378,9 +290,9 @@ export default function Home() {
       id: "team014",
       name: "Backend",
       members: [
-        testEmployees.find(e => e.id === "emp001")!,
-        testEmployees.find(e => e.id === "emp012")!,
-        testEmployees.find(e => e.id === "emp020")!
+        employeeData.find(e => e.id === "emp001")!,
+        employeeData.find(e => e.id === "emp012")!,
+        employeeData.find(e => e.id === "emp020")!
       ],
       lead: "James Wilson",
       description: "Develops and maintains backend systems."
@@ -389,8 +301,8 @@ export default function Home() {
       id: "team015",
       name: "Frontend",
       members: [
-        testEmployees.find(e => e.id === "emp004")!,
-        testEmployees.find(e => e.id === "emp020")!
+        employeeData.find(e => e.id === "emp004")!,
+        employeeData.find(e => e.id === "emp020")!
       ],
       lead: "James Wilson",
       description: "Develops and maintains frontend interfaces."
@@ -399,7 +311,7 @@ export default function Home() {
       id: "team016",
       name: "Security",
       members: [
-        testEmployees.find(e => e.id === "emp020")!
+        employeeData.find(e => e.id === "emp020")!
       ],
       lead: "John Davis",
       description: "Oversees security protocols and measures."
@@ -408,9 +320,9 @@ export default function Home() {
       id: "team017",
       name: "Brand",
       members: [
-        testEmployees.find(e => e.id === "emp011")!,
-        testEmployees.find(e => e.id === "emp018")!,
-        testEmployees.find(e => e.id === "emp003")!
+        employeeData.find(e => e.id === "emp011")!,
+        employeeData.find(e => e.id === "emp018")!,
+        employeeData.find(e => e.id === "emp003")!
       ],
       lead: "Rachel Green",
       description: "Manages brand strategy and identity."
@@ -419,8 +331,8 @@ export default function Home() {
       id: "team018",
       name: "Mobile",
       members: [
-        testEmployees.find(e => e.id === "emp002")!,
-        testEmployees.find(e => e.id === "emp010")!
+        employeeData.find(e => e.id === "emp002")!,
+        employeeData.find(e => e.id === "emp010")!
       ],
       lead: "Thomas Lee",
       description: "Develops and maintains mobile applications."
@@ -429,8 +341,8 @@ export default function Home() {
       id: "team019",
       name: "Enterprise",
       members: [
-        testEmployees.find(e => e.id === "emp006")!,
-        testEmployees.find(e => e.id === "emp017")!
+        employeeData.find(e => e.id === "emp006")!,
+        employeeData.find(e => e.id === "emp017")!
       ],
       lead: "David Thompson",
       description: "Handles enterprise-level projects and clients."
@@ -439,25 +351,25 @@ export default function Home() {
       id: "team020",
       name: "Documentation",
       members: [
-        testEmployees.find(e => e.id === "emp019")!
+        employeeData.find(e => e.id === "emp019")!
       ],
       lead: "Michelle Liu",
       description: "Maintains all project documentation and guides."
     }
-  ], [testEmployees]) as Team[];
+  ], [employeeData]) as Team[];
 
   const tabs = useMemo(() => [
     {
       name: 'All Employees',
       href: '#all-employees',
-      content: <AllEmployees initialData={testEmployees} />,
+      content: <AllEmployees initialData={employeeData} />,
     },
     {
       name: 'Teams',
       href: '#teams',
-      content: <Teams initialData={testTeams} />,
+      content: <TeamsTab initialData={testTeams} />,
     }
-  ], [testEmployees, testTeams]);
+  ], [employeeData, testTeams]);
 
   const handleTabChange = (tab: TabItem) => {
     if (typeof window !== 'undefined') window.history.pushState({}, '', tab.href);
@@ -473,17 +385,70 @@ export default function Home() {
     <>
       <Header
         title="Employees"
-        count={100}
+        count={employeeData.length}
         tooltipText="Manage your organization's employees"
         actions={headerActions}
       />
       <div className="mx-6 mr-4 lg:mx-[51px] py-6">
-      <Tabs 
-        tabs={tabs}
-        defaultTab={tabs.find(tab => tab.href === window.location.hash)?.name || tabs[0].name}
-        onTabChange={handleTabChange}
+        <Tabs 
+          tabs={tabs}
+          defaultTab={tabs.find(tab => tab.href === window.location.hash)?.name || tabs[0].name}
+          onTabChange={handleTabChange}
+        />
+      </div>
+      <DynamicModal
+        users={employeeData}
+        isOpen={showModal && modalType === 'add'}
+        onClose={handleModalClose}
+        onConfirm={handleConfirmEmployeeAction}
+        title="Add New Employee"
+        description="Enter details for the new employee"
+        actionLabel="Add Employee"
+        isCreate={true}
+        createFields={employeeCreationFields}
+        isEmployee={true}
       />
-    </div>
+
+      {showModal && modalType === 'export' && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-md p-8 h-fit flex flex-col gap-7">
+            <div className="flex items-center justify-between">
+              <div className="w-12 h-12 px-3 pt-2 pb-3 bg-[#ffe6ef] rounded-[28px] border-8 border-[#feeeed] justify-center items-center inline-flex">
+                <div className="grow shrink basis-0 h-6 justify-center items-center inline-flex">
+                  <div className="w-6 h-6 relative">
+                    <Image src="/icons/briefcaseColor.svg" width={24} height={24} alt="Export" />
+                  </div>
+                </div>
+              </div>
+              <button onClick={handleModalClose} className="text-gray-500 hover:text-gray-700 relative bottom-20 left-20">
+                <Image src="/icons/cross.svg" width={20} height={20} alt="Close" />
+              </button>
+            </div>
+            <div className="flex-col justify-start items-start gap-2 inline-flex">
+              <div className="self-stretch text-[#15294b] text-[21px] font-semibold font-['Lato'] leading-7">
+                Export Employees
+              </div>
+              <div className="text-gray-500 mb-4">
+                Are you sure you want to export all employee data?
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <button 
+                onClick={handleModalClose} 
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleExportSubmit} 
+                className="flex-1 px-4 py-2 bg-secondary-red text-white rounded-md hover:bg-primary-red"
+              >
+                Export
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

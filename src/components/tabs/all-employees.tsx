@@ -179,7 +179,7 @@ const AllEmployees = ({initialData}: AllEmployeesProps) => {
                               <Image
                                 width={100}
                                 height={100}
-                                className="h-10 w-10 rounded-full"
+                                className="h-10 w-10 rounded-full object-cover"
                                 src={employee.avatar}
                                 alt="Avatar"
                               />
@@ -272,7 +272,7 @@ const AllEmployees = ({initialData}: AllEmployeesProps) => {
                   <Image
                     width={100}
                     height={100}
-                    className="h-10 w-10 rounded-full"
+                    className="h-10 w-10 rounded-full object-cover"
                     src={employee.avatar}
                     alt=""
                   />

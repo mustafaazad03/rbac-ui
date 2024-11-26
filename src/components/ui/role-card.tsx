@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { Permission } from '../tabs/permissions';
+import { User } from './user-chips';
 
 interface Tag {
   label: string;
@@ -16,12 +17,14 @@ interface Manager {
 interface RoleCardProps {
   title: string;
   description: string;
-  teamMembers: (string | null)[];
+  teamMembers: User[];
   additionalMembers?: number;
   tags: Tag[];
   manager: Manager;
   className?: string;
   permissions?: Permission[];
+  onClick?: () => void;
+  onAssign?: () => void;
 }
 
 const RoleCard: React.FC<RoleCardProps> = ({
@@ -32,11 +35,13 @@ const RoleCard: React.FC<RoleCardProps> = ({
   tags,
   manager,
   className = '',
+  onClick,
+  onAssign,
 }) => {
   const MAX_VISIBLE_MEMBERS = 5;
 
   return (
-    <div className={`w-full max-w-[538px] p-6 relative rounded-[15px] border border-[#eff1f4] ${className}`}>
+    <div className={`w-full max-w-[538px] p-6 relative rounded-[15px] border border-[#eff1f4] ${className}`} onClick={onClick}>
       <div className="flex flex-col gap-4">
         {/* Header Section */}
         <div className="flex justify-between items-center flex-wrap gap-4">
@@ -47,23 +52,29 @@ const RoleCard: React.FC<RoleCardProps> = ({
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               {teamMembers.slice(0, MAX_VISIBLE_MEMBERS).filter(Boolean).map((member, index) => (
-                member && <Image
+                member.avatar ? <Image
                   key={index}
                   width={24}
                   height={24}
                   alt={`Team member ${index + 1}`}
-                  className="w-6 h-6 rounded-full object-cover border border-white -ml-1 first:ml-0"
-                  src={member}
-                />
+                  className="w-8 h-8 rounded-full object-cover border border-white -ml-1 first:ml-0"
+                  src={member.avatar}
+                /> : (<div
+                          key={index}
+                        className="w-8 h-8 rounded-full border-2 border-white -ml-1 first:ml-0 bg-fade-primary-red-2 text-secondary-red flex items-center justify-center text-xs font-medium"
+                        >
+                          {member.name.charAt(0).toUpperCase()}{member.name.charAt(member.name.length - 1).toUpperCase()}
+                      </div>
+                    )
               ))}
               {(teamMembers.length > MAX_VISIBLE_MEMBERS || additionalMembers > 0) && (
-                <div className="px-2 py-1 -ml-1 bg-[#f7e8ef] rounded-full border-2 border-white">
+                <div className="w-8 h-8 p-2 px-[9px] flex items-center justify-center -ml-1 bg-[#f7e8ef] rounded-full border-2 border-white">
                   <span className="text-secondary-red text-xs font-medium font-['Inter']">
                     +{(teamMembers.length - MAX_VISIBLE_MEMBERS) + additionalMembers}
                   </span>
                 </div>
               )}
-              <div className="w-6 h-6 bg-white rounded-xl border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1">
+              <div className="w-8 h-8 bg-white rounded-full border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1 cursor-pointer" onClick={onAssign}>
                 <div className="self-stretch p-1 rounded-xl justify-center items-center inline-flex">
                     <Image src="/icons/plus_gray.svg" width={16} height={16} alt="Add" />
                 </div>

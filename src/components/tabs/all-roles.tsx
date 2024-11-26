@@ -3,22 +3,11 @@ import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import FilteringSection from '../common/filteringSection';
 import RoleCard from '../ui/role-card';
 import Image from 'next/image';
+import { User } from '../ui/user-chips';
 
 interface Tab {
   name: string;
   content: Role[];
-}
-
-interface RoleManager {
-  name: string;
-  email: string;
-  avatar: string;
-}
-
-interface RoleUser {
-  avatar?: string;
-  name: string;
-  email: string;
 }
 
 export type Role = {
@@ -26,16 +15,18 @@ export type Role = {
   label: string;
   description: string;
   badges: string[];
-  manager: RoleManager;
-  users: RoleUser[];
+  manager: User;
+  users: User[];
   permissions?: string[];
 }
 
 interface AllRolesProps {
   initialData: Role[];
+  setSelectedRole: (role: Role) => void;
+  handleAssignRole?: (selectedRole: Role) => void;
 }
 
-const AllRoles = ({ initialData }: AllRolesProps) => {
+const AllRoles = ({ initialData, setSelectedRole, handleAssignRole }: AllRolesProps) => {
   const [view, setView] = useState<'list' | 'grid'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredRoles, setFilteredRoles] = useState<Role[]>(initialData);
@@ -47,6 +38,12 @@ const AllRoles = ({ initialData }: AllRolesProps) => {
 
   const [selectedTab, setSelectedTab] = useState('All');
   const [selectedTabContent, setSelectedTabContent] = useState<Role[]>(initialData);
+
+  const handleAssignRoleFn = (role: Role) => {
+    if (handleAssignRole) {
+      handleAssignRole(role);
+    }
+  }
 
   // Update filtered roles when initial data changes
   useEffect(() => {
@@ -184,7 +181,7 @@ const AllRoles = ({ initialData }: AllRolesProps) => {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {filteredRoles.map((role) => (
-                    <tr key={role.label}>
+                    <tr key={role.label} onClick={() => setSelectedRole(role)}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{role.label}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{role.description}</td>
                       <td className="px-3 py-4 text-sm text-gray-500">
@@ -234,12 +231,14 @@ const AllRoles = ({ initialData }: AllRolesProps) => {
       )}
       {view === 'grid' && (
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredRoles.map((role) => (
+          {filteredRoles.map((role, idx) => (
             <RoleCard
-              key={role.label}
+              onClick={() => setSelectedRole(role)}
+              onAssign={() => handleAssignRoleFn(role)}
+              key={idx}
               title={role.label}
               description={role.description}
-              teamMembers={role.users.map(user => user.avatar || '')}
+              teamMembers={role.users as User[]}
               tags={role.badges.map(badge => ({ label: badge }))}
               manager={{
                 name: role.manager.name,

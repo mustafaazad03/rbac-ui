@@ -3,10 +3,16 @@ import Image from "next/image"
 export interface User {
   id: string
   name: string
+  email: string
   role: string
   department: string
-  imageUrl: string
   selected?: boolean
+  employeeId: string;
+  status: 'Active' | 'Inactive';
+  teams: string[];
+  type: 'Full time' | 'Part time' | 'Contract' | 'Associate';
+  additionalCount?: number;
+  avatar: string;
 }
 
 interface UserCardProps {
@@ -30,7 +36,7 @@ export function UserChip({ user, onSelect }: UserCardProps) {
       }}
     >
       <Image
-        src={user.imageUrl}
+        src={user.avatar || "/avatar.png"}
         width={100}
         height={100}
         alt=""
@@ -43,7 +49,7 @@ export function UserChip({ user, onSelect }: UserCardProps) {
         </p>
       </div>
       <div
-        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${user.selected? "border-secondary-red bg-secondary-red text-primary-red" : "border-gray-border"}`}
+        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${user.selected? "border-secondary-red bg-secondary-red text-white" : "border-gray-border"}`}
       >
         {user.selected && (
           <svg

@@ -148,7 +148,7 @@ const TeamsTab = ({ initialData }: TeamsTabProps) => {
                                     <Image
                                       width={40}
                                       height={40}
-                                      className="h-10 w-10 rounded-full"
+                                      className="h-10 w-10 rounded-full object-cover"
                                       src={member.avatar}
                                       alt=""
                                     />
@@ -245,7 +245,7 @@ const TeamsTab = ({ initialData }: TeamsTabProps) => {
                           <Image
                             width={32}
                             height={32}
-                            className="h-8 w-8 rounded-full"
+                            className="h-8 w-8 rounded-full object-cover"
                             src={member.avatar}
                             alt=""
                           />

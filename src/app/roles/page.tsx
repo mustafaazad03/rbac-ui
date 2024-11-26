@@ -2,104 +2,93 @@
 
 import Header from "@/components/header";
 import Tabs, { TabItem } from "@/components/tabs";
-import AllRoles from "@/components/tabs/all-roles";
+import AllRoles, { Role } from "@/components/tabs/all-roles";
 import PermissionsWithFilters from "@/components/tabs/permissions";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import employee from '@/data/employee.json';
+import { User } from "@/components/ui/user-chips";
+import DynamicModal, { FormField } from "@/components/modals/dynamic-modal";
 
 export default function Roles() {
-
-  const handleAssignRole = () => {
-    console.log('Assign role');
-  }
-
-  const handleNewRole = () => {
-    console.log('New role');
-  }
-  const testEmployees = Array(20).fill(null).map((_, index) => ({
-    id: `emp${(index + 1).toString().padStart(3, '0')}`,
-    name: ["Sarah Johnson", "John Smith", "Emily Chen", "Michael Brown", "Lisa Wong", 
-          "David Park", "Rachel Garcia", "James Wilson", "Anna Lee", "Robert Taylor",
-          "Maria Rodriguez", "Thomas Anderson", "Jennifer Kim", "William Davis", "Michelle Patel",
-          "Kevin Zhang", "Laura Martinez", "Steven Clark", "Jessica Wong", "Daniel Lee"][index],
-    email: `employee${index + 1}@company.com`,
-    employeeId: `EMP-2024-${(index + 1).toString().padStart(3, '0')}`,
-    role: ["Senior Software Engineer", "Product Manager", "Marketing Specialist", "UX Designer", 
-          "Data Scientist", "DevOps Engineer", "Content Strategist", "Project Manager", 
-          "Quality Assurance", "Frontend Developer", "Backend Developer", "Sales Manager",
-          "HR Manager", "Financial Analyst", "Customer Success", "Systems Architect",
-          "Business Analyst", "Security Engineer", "Technical Writer", "UI Designer"][index],
-    status: "Active",
-    teams: [
-      [["Engineering", "Backend"], ["Product", "Strategy"], ["Marketing", "Content"],
-        ["Design", "UX"], ["Data", "Analytics"], ["DevOps", "Infrastructure"],
-        ["Marketing", "Content"], ["Product", "Management"], ["QA", "Testing"],
-        ["Engineering", "Frontend"], ["Engineering", "Backend"], ["Sales", "Business"],
-        ["HR", "Operations"], ["Finance", "Analytics"], ["Customer", "Support"],
-        ["Engineering", "Architecture"], ["Business", "Analytics"], ["Security", "Engineering"],
-        ["Documentation", "Technical"], ["Design", "UI"]][index]
-    ],
-    type: "Full time",
-    avatar: "/avatar.png"
-  }));
-
-  const rolesData = useMemo(() => [
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateMode, setIsCreateMode] = useState(false);
+  const testEmployees = useMemo(() => employee, []) as User[];
+  const [AssignedRole, setAssignedRole] = useState<Role>();
+  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [rolesData, setRolesData] = useState([
     {
       label: "Engineering Lead",
       description: "Technical leadership and architecture decisions",
       badges: ["Engineering", "Architecture", "Team Leadership"],
-      manager: { name: "Mike Chen", email: "mike.chen@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("Engineering")))
     },
     {
       label: "Product Manager",
       description: "Product strategy and roadmap planning",
       badges: ["Product Strategy", "Roadmap", "Stakeholder Management"],
-      manager: { name: "Lisa Wong", email: "lisa.wong@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.role.includes("Product"))
     },
     {
       label: "Marketing Director",
       description: "Brand strategy and marketing campaigns",
       badges: ["Marketing", "Brand Strategy", "Communications"],
-      manager: { name: "David Smith", email: "david.smith@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("Marketing")))
     },
     {
       label: "HR Director",
       description: "Human resources and talent management",
       badges: ["HR", "Talent Management", "Employee Relations"],
-      manager: { name: "Jennifer Lee", email: "jennifer.lee@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("HR")))
     },
     {
       label: "Security Manager",
       description: "Information security and compliance",
       badges: ["Security", "Compliance", "Risk Management"],
-      manager: { name: "Robert Chen", email: "robert.chen@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("Security")))
     },
     {
       label: "Finance Director",
       description: "Financial planning and analysis",
       badges: ["Finance", "Analytics", "Budget Management"],
-      manager: { name: "Maria Garcia", email: "maria.garcia@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("Finance")))
     },
     {
       label: "Design Lead",
       description: "UX/UI design leadership and design systems",
       badges: ["Design", "UX", "UI"],
-      manager: { name: "Sarah Park", email: "sarah.park@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("Design")))
     },
     {
       label: "DevOps Manager",
       description: "Infrastructure and deployment management",
       badges: ["DevOps", "Infrastructure", "Cloud"],
-      manager: { name: "James Wilson", email: "james.wilson@company.com", avatar: "/avatar.png" },
+      manager: testEmployees.find(e => e.role === "Manager") || testEmployees[0],
       users: testEmployees.filter(e => e.teams.some(team => team.includes("DevOps")))
     }
-  ], [testEmployees]);
+  ]);
+
+  const handleAssignRole = (assignRole?: Role) => {
+    setIsCreateMode(false);
+    setAssignedRole(assignRole);
+    setIsModalOpen(true);
+  }
+
+  const handleNewRole = () => {
+    setIsCreateMode(true);
+    setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setIsCreateMode(false);
+  }
 
   const headerActions = [
     {
@@ -120,7 +109,7 @@ export default function Roles() {
     {
       name: 'All Roles',
       href: '#all-roles',
-      content: <AllRoles initialData={rolesData} />,
+      content: <AllRoles initialData={rolesData} setSelectedRole={(role: Role) => setSelectedRole(role)} handleAssignRole={(AssignedRole: Role) => handleAssignRole(AssignedRole)} />,
     },
     {
       name: 'Permissions',
@@ -135,6 +124,41 @@ export default function Roles() {
     }
   ], [rolesData]);
 
+  const handleConfirmRoleAssignment = (
+    selectedUsers: User[], 
+    formData?: Record<string, string>
+  ) => {
+    if (isCreateMode && formData) {
+      // if not manager seleted assign best suite manager from the employee
+      const bestManager = selectedUsers.find(user => user.role === 'Manager') || selectedUsers[0];
+      const bestBadge = selectedUsers.find(user => user.teams) || selectedUsers[0];
+      // Create new role
+      const newRole = {
+        label: formData['role_name'],
+        description: formData['role_description'],
+        badges: formData['roleBadges']?.split(',').map(badge => badge.trim()) || bestBadge.teams.map(team => team.trim()),
+        manager: bestManager,
+        users: selectedUsers
+      };
+      setRolesData(prev => [...prev, newRole]);
+    } else if (selectedRole) {
+      // Assign selected users to an existing role
+      setRolesData(prev => prev.map(role => {
+        if (role.label === selectedRole.label) {
+          // Merge existing users with newly selected users
+          const updatedUsers = [
+            ...role.users, 
+            ...selectedUsers.filter(newUser => 
+              !role.users.some(existingUser => existingUser.id === newUser.id)
+            )
+          ];
+          return { ...role, users: updatedUsers };
+        }
+        return role;
+      }));
+    }
+  }
+
   const handleTabChange = (tab: TabItem) => {
     if (typeof window !== 'undefined') window.history.pushState({}, '', tab.href);
   };
@@ -144,6 +168,25 @@ export default function Roles() {
     const matchingTab = tabs.find(tab => tab.href === hash);
     handleTabChange(matchingTab || tabs[0]);
   }, [tabs]);
+
+  const roleCreationFields: FormField[] = [
+    {
+      id: 'role_name',
+      label: 'Role Name',
+      type: 'text',
+      required: true,
+      placeholder: 'Enter role name',
+      validation: (value: string) => 
+        value.length < 3 ? 'Role name must be at least 3 characters' : null
+    },
+    {
+      id: 'role_description',
+      label: 'Description',
+      type: 'textarea',
+      placeholder: 'Describe the role responsibilities',
+    }
+  ];
+
   return (
     <>
       <Header
@@ -159,6 +202,22 @@ export default function Roles() {
           onTabChange={handleTabChange}
         />
       </div>
+
+      <DynamicModal 
+          users={testEmployees}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onConfirm={(selectedUsers: User[], formData: Record<string, string>) => handleConfirmRoleAssignment(selectedUsers, formData)}
+          title={isCreateMode ? "Create New Role" : "Assign Role"}
+          description={isCreateMode 
+            ? "Enter details for the new role" 
+            : "Select employees to assign to this role"}
+          actionLabel={isCreateMode ? "Create Role" : "Assign Role"}
+          isCreate={isCreateMode}
+          createFields={roleCreationFields}
+          selectedRole={AssignedRole}
+          initialSelectedUsers={selectedRole?.users || []}
+        />
     </>
   );
 }
