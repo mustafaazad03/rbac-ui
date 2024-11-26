@@ -39,6 +39,10 @@ export default function Roles() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setIsCreateMode(false);
+    setIsEditPermissionsMode(false);
+    setAssignedRole(undefined);
+    setSelectedRole(undefined);
+    setPermissionsToEdit([]);
   }
 
   const handleEditPermissions = (role: Role) => {
