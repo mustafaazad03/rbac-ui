@@ -21,13 +21,14 @@ interface RoleUser {
   email: string;
 }
 
-interface Role {
+export type Role = {
   id?: string;
   label: string;
   description: string;
   badges: string[];
   manager: RoleManager;
   users: RoleUser[];
+  permissions?: string[];
 }
 
 interface AllRolesProps {

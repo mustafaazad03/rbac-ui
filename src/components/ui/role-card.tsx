@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import { Permission } from '../tabs/permissions';
 
 interface Tag {
   label: string;
@@ -20,6 +21,7 @@ interface RoleCardProps {
   tags: Tag[];
   manager: Manager;
   className?: string;
+  permissions?: Permission[];
 }
 
 const RoleCard: React.FC<RoleCardProps> = ({

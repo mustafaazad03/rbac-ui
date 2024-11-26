@@ -3,6 +3,7 @@
 import Header from "@/components/header";
 import Tabs, { TabItem } from "@/components/tabs";
 import AllRoles from "@/components/tabs/all-roles";
+import PermissionsWithFilters from "@/components/tabs/permissions";
 import { useEffect, useMemo } from "react";
 
 export default function Roles() {
@@ -124,11 +125,13 @@ export default function Roles() {
     {
       name: 'Permissions',
       href: '#permissions',
-      content: (
-        <div>
-          <h1>Permissions</h1>
-        </div>
-      ),
+      content: <PermissionsWithFilters initialPermissions={[
+        { id: 'perm1', name: 'View Dashboard', description: 'View the dashboard and analytics', isGranted: true },
+        { id: 'perm2', name: 'Manage Users', description: 'Add, edit, and remove users', isGranted: false },
+        { id: 'perm3', name: 'Manage Roles', description: 'Create, edit, and remove roles', isGranted: true },
+        { id: 'perm4', name: 'Manage Permissions', description: 'Create, edit, and remove permissions', isGranted: false },
+        { id: 'perm5', name: 'Manage Settings', description: 'Update application settings', isGranted: true },
+      ]} />,
     }
   ], [rolesData]);
 

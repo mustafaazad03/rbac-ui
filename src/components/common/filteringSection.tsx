@@ -10,32 +10,33 @@ interface FilteringSectionProps {
   view: View;
   setView: (view: View) => void;
   handlingSearch: (value: string) => void;
-  activeFilters: {
+  activeFilters?: {
     status?: string[];
     teams?: string[];
     type?: string[];
     size?: string[];
     department?: string[];
   };
-  setActiveFilters: React.Dispatch<React.SetStateAction<{
+  setActiveFilters?: React.Dispatch<React.SetStateAction<{
     status?: string[];
     teams?: string[];
     type?: string[];
     size?: string[];
     department?: string[];
   }>>;
-  AllowedFilters: string[];
+  AllowedFilters?: string[];
 }
 
-const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setActiveFilters, AllowedFilters}: FilteringSectionProps) => {
+const FilteringSection = ({view, setView, handlingSearch, activeFilters, setActiveFilters, AllowedFilters}: FilteringSectionProps) => {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   // Get active filter count
-  const activeFilterCount = Object.values(activeFilters).reduce(
+  const activeFilterCount = activeFilters && Object.values(activeFilters).reduce(
     (count, filters) => count + filters.length,
     0
   );
-  
+
+  const filterCount = activeFilterCount && activeFilterCount > 0 ? true : false;
   return (
     <>
       <div className='flex items-center justify-between w-full'>
@@ -46,24 +47,25 @@ const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setAc
           />
         </div>
         <div className="flex items-center gap-[14px]">
-          <div className="flex items-center">
-            {/* Filter Button */}
-            <Button
-              variant="ghost"
-              className="flex items-center gap-2 px-4 py-[10px] border border-gray-200 rounded-lg"
-              onclick={() => setIsFilterModalOpen(true)}
-            >
-              <Image src='/icons/Filters lines.svg' width={20} height={20} alt='Filter Icon' />
-              <span className="text-sm text-gray-700">
-                Filter
-                {activeFilterCount > 0 && (
-                  <span className="ml-1 rounded-full bg-indigo-100 px-2 text-xs text-indigo-600">
-                    {activeFilterCount}
-                  </span>
-                )}
-              </span>
-            </Button>
-          </div>
+          {activeFilters && AllowedFilters && (
+            <div className="flex items-center">
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 px-4 py-[10px] border border-gray-200 rounded-lg"
+                onclick={() => setIsFilterModalOpen(true)}
+              >
+                <Image src='/icons/Filters lines.svg' width={20} height={20} alt='Filter Icon' />
+                <span className="text-sm text-gray-700">
+                  Filter
+                  {filterCount && (
+                    <span className="ml-2 rounded-full bg-fade-blue px-2 py-1 text-xs text-dark-blue">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </span>
+              </Button>
+            </div>
+          )}
           
           <div className="flex items-center rounded-lg gap-1">
             <Button
@@ -85,13 +87,15 @@ const FilteringSection = ({view, setView, handlingSearch,   activeFilters, setAc
       </div>
 
       {/* Filter Modal */}
-      <FilterModal
-        isOpen={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
-        activeFilters={activeFilters}
-        setActiveFilters={setActiveFilters}
-        AllowedFilters={AllowedFilters}
-      />
+      {AllowedFilters && (
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          activeFilters={activeFilters!}
+          setActiveFilters={setActiveFilters!}
+          AllowedFilters={AllowedFilters}
+        />
+      )}
     </>
   )
 }
