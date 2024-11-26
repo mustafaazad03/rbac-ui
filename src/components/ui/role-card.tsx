@@ -41,7 +41,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
   const MAX_VISIBLE_MEMBERS = 5;
 
   return (
-    <div className={`w-full max-w-[538px] p-6 relative rounded-[15px] border border-[#eff1f4] ${className}`} onClick={onClick}>
+    <div className={`w-full max-w-[538px] p-6 relative rounded-[15px] border border-[#eff1f4] ${className}`}>
       <div className="flex flex-col gap-4">
         {/* Header Section */}
         <div className="flex justify-between items-center flex-wrap gap-4">
@@ -74,7 +74,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
                   </span>
                 </div>
               )}
-              <div className="w-8 h-8 bg-white rounded-full border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1 cursor-pointer" onClick={onAssign}>
+              <div className="w-8 h-8 bg-white rounded-full border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1 cursor-context-menu relative z-50" onClickCapture={onAssign}>
                 <div className="self-stretch p-1 rounded-xl justify-center items-center inline-flex">
                     <Image src="/icons/plus_gray.svg" width={16} height={16} alt="Add" />
                 </div>
@@ -105,7 +105,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
         </div>
 
         {/* Manager Section */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" onClick={onClick}>
           <Image
             width={34}
             height={34}
@@ -120,6 +120,10 @@ const RoleCard: React.FC<RoleCardProps> = ({
             <span className="text-[#909dad] text-sm font-normal">
               {manager.role}
             </span>
+          </div>
+          {/* Arrow for permission */}
+          <div className="flex-grow ml-6">
+            <Image src="/icons/arrow-right.svg" width={16} height={16} alt="View" />
           </div>
         </div>
       </div>

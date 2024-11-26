@@ -4,29 +4,21 @@ import FilteringSection from '../common/filteringSection';
 import RoleCard from '../ui/role-card';
 import Image from 'next/image';
 import { User } from '../ui/user-chips';
+import { Role } from '@/context/organization-context';
 
 interface Tab {
   name: string;
   content: Role[];
 }
 
-export type Role = {
-  id?: string;
-  label: string;
-  description: string;
-  badges: string[];
-  manager: User;
-  users: User[];
-  permissions?: string[];
-}
-
 interface AllRolesProps {
   initialData: Role[];
   setSelectedRole: (role: Role) => void;
   handleAssignRole?: (selectedRole: Role) => void;
+  handleEditPermissions?: (role: Role) => void | undefined;
 }
 
-const AllRoles = ({ initialData, setSelectedRole, handleAssignRole }: AllRolesProps) => {
+const AllRoles = ({ initialData, setSelectedRole, handleAssignRole, handleEditPermissions }: AllRolesProps) => {
   const [view, setView] = useState<'list' | 'grid'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredRoles, setFilteredRoles] = useState<Role[]>(initialData);
@@ -42,6 +34,13 @@ const AllRoles = ({ initialData, setSelectedRole, handleAssignRole }: AllRolesPr
   const handleAssignRoleFn = (role: Role) => {
     if (handleAssignRole) {
       handleAssignRole(role);
+    }
+  }
+
+  const handleClick = (role: Role) => {
+    setSelectedRole(role);
+    if (handleEditPermissions) {
+      handleEditPermissions(role);
     }
   }
 
@@ -181,7 +180,7 @@ const AllRoles = ({ initialData, setSelectedRole, handleAssignRole }: AllRolesPr
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {filteredRoles.map((role) => (
-                    <tr key={role.label} onClick={() => setSelectedRole(role)}>
+                    <tr key={role.label} onClick={() => handleClick(role)} className='cursor-pointer'>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">{role.label}</td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{role.description}</td>
                       <td className="px-3 py-4 text-sm text-gray-500">
@@ -233,7 +232,7 @@ const AllRoles = ({ initialData, setSelectedRole, handleAssignRole }: AllRolesPr
         <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredRoles.map((role, idx) => (
             <RoleCard
-              onClick={() => setSelectedRole(role)}
+              onClick={() => handleClick(role)}
               onAssign={() => handleAssignRoleFn(role)}
               key={idx}
               title={role.label}

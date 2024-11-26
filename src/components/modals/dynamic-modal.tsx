@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { User, UserChip } from '../ui/user-chips';
-import { Role } from '../tabs/all-roles';
+import { Permission, Role } from '@/context/organization-context';
 
 interface DynamicModalProps {
   users: User[];
@@ -16,6 +16,9 @@ interface DynamicModalProps {
   createFields?: FormField[];
   initialSelectedUsers?: User[];
   isEmployee?: boolean;
+  isEditPermissionsMode?: boolean;
+  permissions?: Permission[];
+  onPermissionChange?: (permissions: Permission[]) => void;
 }
 
 export interface FormField {
@@ -29,7 +32,7 @@ export interface FormField {
   defaultValue?: string;
 }
 
-const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this role", description="Select one or multiple employees to assign to this role", actionLabel="Confirm", selectedRole, isCreate = false, createFields = [], initialSelectedUsers, isEmployee = false}: DynamicModalProps) => {
+const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this role", description="Select one or multiple employees to assign to this role", actionLabel="Confirm", selectedRole, isCreate = false, createFields = [], initialSelectedUsers, isEmployee = false, isEditPermissionsMode = false, onPermissionChange, permissions = []}: DynamicModalProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
@@ -47,6 +50,57 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
         user.id === userId ? { ...user, selected: !user.selected } : user
       )
     )
+  }
+
+  const handlePermissionToggle = (permissionId: string) => {
+    if (!onPermissionChange) return;
+
+    const updatedPermissions = permissions.map(perm => 
+      perm.id === permissionId 
+        ? { ...perm, isGranted: !perm.isGranted } 
+        : perm
+    );
+
+    onPermissionChange(updatedPermissions);
+  }
+
+  const renderPermissionsSection = () => {
+    return (
+      <div className="space-y-4">
+        {permissions.map(permission => (
+          <div 
+            key={permission.id} 
+            className="flex items-center justify-between p-3 border rounded-md"
+          >
+            <div>
+              <h4 className="font-semibold">{permission.name}</h4>
+              <p className="text-sm text-gray-600">{permission.description}</p>
+            </div>
+            <label className="inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={permission.isGranted}
+                onChange={() => handlePermissionToggle(permission.id)}
+                className="sr-only peer"
+              />
+              <div className={`
+                relative w-11 h-6 bg-gray-200 rounded-full peer 
+                ${permission.isGranted ? 'peer-checked:bg-secondary-red' : ''}
+                peer-focus:ring-4 peer-focus:ring-redbg-secondary-red 
+                dark:peer-focus:ring-secondary-red dark:peer-focus:ring-opacity-50 
+                after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
+                after:bg-white after:border-gray-300 after:border after:rounded-full 
+                after:h-5 after:w-5 after:transition-all 
+                ${permission.isGranted 
+                  ? 'after:translate-x-full after:border-white' 
+                  : ''}
+              `}
+              />
+            </label>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   // Reset modal state when opened
@@ -209,7 +263,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-lg w-full max-w-md p-8 h-fit flex flex-col gap-7">
+      <div className="bg-white rounded-lg w-full max-w-md lg:max-w-lg p-8 h-fit flex flex-col gap-7">
         <div className="flex items-center justify-between">
           <div className="w-12 h-12 px-3 pt-2 pb-3 bg-[#ffe6ef] rounded-[28px] border-8 border-[#feeeed] justify-center items-center inline-flex">
             <div className="grow shrink basis-0 h-6 justify-center items-center inline-flex">
@@ -224,12 +278,20 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
         </div>
         <div className="flex-col justify-start items-start gap-2 inline-flex">
           <div className="self-stretch text-[#15294b] text-[21px] font-semibold font-['Lato'] leading-7">{title}</div>
+
+          {isEditPermissionsMode && (
+            <div className="w-full">
+              <h3 className="text-lg font-semibold mb-4">Manage Permissions</h3>
+              {renderPermissionsSection()}
+            </div>
+          )}
+
           {isCreate && (
           <div className="mb-3 w-full">
             {createFields.map(field => <div key={field.id}>{renderFormInput(field)}</div>)}
           </div>
         )}
-        {!isEmployee && (
+        {!isEmployee && !isEditPermissionsMode && (
           <div className="flex items-center gap-2 text-gray-400">
             {description} <span className="text-secondary-red text-sm font-bold font-['Inter'] leading-tight max-w-[200px] inline-block overflow-hidden text-ellipsis whitespace-nowrap">
             &quot; {(selectedRole?.label || formData['role_name'])?.length > 15 
@@ -239,7 +301,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
           </div>
         )}
         </div>
-        {!isEmployee && (
+        {!isEmployee && !isEditPermissionsMode && (
           <div className="flex flex-col gap-[10px]">
             <div className={`flex w-full h-12 items-center justify-between py-3 px-2 border border-gray-border rounded-lg`}>
               <div className="flex items-center gap-2">
