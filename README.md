@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RBAC UI
 
-## Getting Started
+This is the Role-Based Access Control (RBAC) User Interface for managing permissions and roles. It provides an intuitive interface for administrators to control user access levels and permissions.
 
-First, run the development server:
+## Features
+
+- **User Management**: Add, edit, and remove users.
+- **Role Management**: Create and assign roles to users.
+- **Permission Configuration**: Define permissions for each role.
+- **Dashboard**: View summaries of user activities and access levels.
+
+## Prerequisites
+
+- **Node.js** 16.x or later
+- **npm** 7.x or later
+
+## Installation
+
+1. **Clone the repository**:
+
+  ```bash
+  git clone https://github.com/mustafaazad03/rbac-ui.git
+  cd rbac-ui
+  ```
+
+2. **Install dependencies**:
+
+  ```bash
+  npm install
+  ```
+
+## Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Access the application at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To build the application:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the production server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the application.
+- `npm start`: Run the production server.
+- `npm run lint`: Lint the codebase.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologies Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js** 15.0.3
+- **React** 19.x
+- **TypeScript** 5.x
+- **Tailwind CSS** 3.4.1
+
+## Project Structure
+
+- `src/` - Source code
+  - `app/` - Application pages
+  - `components/` - Reusable components
+  - `context/` - Context providers
+  - `data/` - Static data files
+  - `ui/` - UI components
+  - `utils/` - Utility functions
+  - `types/` - Common components and hooks
+  - `constant/` - Constants
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-name`.
+3. Commit your changes: `git commit -m 'Add new feature'`.
+4. Push to the branch: `git push origin feature-name`.
+5. Open a pull request.
+
+## Contact
+
+For questions or support, please contact:
+
+- Mustafa Azad - [mustafaazad533@gmail.com](mailto:mustafaazad533@gmail.com)
+- GitHub: [mustafaazad03](https://github.com/mustafaazad03)

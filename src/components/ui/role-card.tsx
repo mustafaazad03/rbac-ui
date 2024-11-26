@@ -48,7 +48,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
           <h3 className="text-dark-blue text-lg font-black line-clamp-1">
             {title}
           </h3>
-          
+
           <div className="flex items-center gap-2">
             <div className="flex items-center">
               {teamMembers.slice(0, MAX_VISIBLE_MEMBERS).filter(Boolean).map((member, index) => (
@@ -74,7 +74,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
                   </span>
                 </div>
               )}
-              <div className="w-8 h-8 bg-white rounded-full border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1 cursor-context-menu relative z-50" onClickCapture={onAssign}>
+              <div className="w-8 h-8 bg-white rounded-full border border-[#cfd4dc] border-dashed justify-center items-center inline-flex ml-1 cursor-context-menu" onClickCapture={onAssign}>
                 <div className="self-stretch p-1 rounded-xl justify-center items-center inline-flex">
                     <Image src="/icons/plus_gray.svg" width={16} height={16} alt="Add" />
                 </div>
@@ -105,7 +105,7 @@ const RoleCard: React.FC<RoleCardProps> = ({
         </div>
 
         {/* Manager Section */}
-        <div className="flex items-center gap-2" onClick={onClick}>
+        <div className="flex items-center gap-2 cursor-pointer" onClick={onClick}>
           <Image
             width={34}
             height={34}

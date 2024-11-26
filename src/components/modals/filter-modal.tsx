@@ -69,7 +69,7 @@ const FilterModal = ({
       <div className="bg-white rounded-lg w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Filters</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 relative bottom-12 left-16">
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 relative sm:bottom-12 sm:left-16 bottom-20 left-8">
             <Image src="/icons/cross.svg" width={20} height={20} alt="Close" />
           </button>
         </div>

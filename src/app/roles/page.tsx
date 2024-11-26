@@ -56,12 +56,6 @@ export default function Roles() {
 
   const headerActions = [
     {
-      label: 'Assign',
-      icon: '/icons/plus_gray.svg',
-      onclick: handleAssignRole,
-      variant: 'secondary' as const,
-    },
-    {
       label: 'New Role',
       icon: '/icons/plus.svg',
       onclick: handleNewRole,
@@ -127,7 +121,7 @@ export default function Roles() {
       <Header
         title="Roles"
         count={roles.length}
-        tooltipText="Roles"
+        tooltipText="Manage, Create your role"
         actions={headerActions}
       />
       <div className="mx-6 mr-4 lg:mx-[51px] py-6">
@@ -146,23 +140,23 @@ export default function Roles() {
           handleConfirmRoleAssignment(selectedUsers, formData)
         }
         title={
-          isCreateMode 
+          isCreateMode
             ? "Create New Role" 
-            : isEditPermissionsMode 
+            : isEditPermissionsMode
             ? "Edit Role Permissions" 
             : "Assign Role"
         }
         description={
-          isCreateMode 
+          isCreateMode
             ? "Enter details for the new role" 
             : isEditPermissionsMode
             ? "Modify permissions for this role"
             : "Select employees to assign to this role"
         }
         actionLabel={
-          isCreateMode 
+          isCreateMode
             ? "Create Role" 
-            : isEditPermissionsMode 
+            : isEditPermissionsMode
             ? "Update Permissions" 
             : "Assign Role"
         }

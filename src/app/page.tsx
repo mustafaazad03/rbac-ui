@@ -169,7 +169,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <button onClick={handleModalClose} className="text-gray-500 hover:text-gray-700 relative bottom-20 left-20">
+              <button onClick={handleModalClose} className="text-gray-500 hover:text-gray-700 relative sm:bottom-20 sm:left-20 bottom-20 left-8">
                 <Image src="/icons/cross.svg" width={20} height={20} alt="Close" />
               </button>
             </div>

@@ -86,7 +86,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
               <div className={`
                 relative w-11 h-6 bg-gray-200 rounded-full peer 
                 ${permission.isGranted ? 'peer-checked:bg-secondary-red' : ''}
-                peer-focus:ring-4 bg-secondary-red 
+                peer-focus:ring-4 
                 dark:peer-focus:ring-secondary-red dark:peer-focus:ring-opacity-50 
                 after:content-[''] after:absolute after:top-0.5 after:left-[2px] 
                 after:bg-white after:border-gray-300 after:border after:rounded-full 
@@ -263,7 +263,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-lg w-full max-w-md lg:max-w-lg p-8 h-fit flex flex-col gap-7">
+      <div className="bg-white rounded-lg w-full max-w-xs sm:max-w-md lg:max-w-lg p-8 h-fit flex flex-col gap-7">
         <div className="flex items-center justify-between">
           <div className="w-12 h-12 px-3 pt-2 pb-3 bg-[#ffe6ef] rounded-[28px] border-8 border-[#feeeed] justify-center items-center inline-flex">
             <div className="grow shrink basis-0 h-6 justify-center items-center inline-flex">
@@ -272,7 +272,7 @@ const DynamicModal = ({users ,isOpen, onClose, onConfirm, title="Assign this rol
               </div>
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 relative bottom-20 left-20">
+          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 relative sm:bottom-20 sm:left-20 bottom-20 left-8">
             <Image src="/icons/cross.svg" width={20} height={20} alt="Close" />
           </button>
         </div>
