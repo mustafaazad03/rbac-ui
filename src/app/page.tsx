@@ -19,9 +19,39 @@ export default function Home() {
     roles,
     updateEmployee,
   } = useOrganization();
+
+  // Add mounted state
+  const [mounted, setMounted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<'export' | 'add' | 'edit' | null>(null);
   const [selectedEmployee, setSelectedEmployee] = useState<User | null>(null);
+  const [currentTab, setCurrentTab] = useState('All Employees');
+
+  const tabs = useMemo(() => [
+    {
+      name: 'All Employees',
+      href: '#all-employees',
+      content: <AllEmployees initialData={employees} />,
+    },
+    {
+      name: 'Teams',
+      href: '#teams',
+      content: <TeamsTab initialData={teams} />,
+    }
+  ], [employees, teams]);
+
+  // Handle client-side initialization
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '#all-employees';
+      const matchingTab = tabs.find(tab => tab.href === hash);
+      if (matchingTab) {
+        setCurrentTab(matchingTab.name);
+        handleTabChange(matchingTab);
+      }
+    }
+  }, [tabs]);
 
   const handleExport = () => {
     setModalType('export');
@@ -54,6 +84,8 @@ export default function Home() {
   ];
 
   const handleExportSubmit = () => {
+    if (typeof window === 'undefined') return;
+    
     const data = JSON.stringify(employees, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -70,11 +102,9 @@ export default function Home() {
   ) => {
     const isEmailUnique = !employees.some(emp => emp.email === formData.email);
     if (!isEmailUnique) {
-      // Consider adding a toast or error notification
       throw new Error('Email already exists');
     }
     if (modalType === 'add') {
-      // Create new employee using addEmployee method from context
       const newEmployeeData: User = {
         id: `emp${String(employees.length + 1).padStart(3, '0')}`,
         employeeId: `emp${String(employees.length + 1).padStart(3, '0')}`,
@@ -101,34 +131,21 @@ export default function Home() {
       updateEmployee(selectedEmployee.id, updatedEmployeeData);
     }
     
-    // Close modal
-    setShowModal(false);
-    setModalType(null);
+    handleModalClose();
     setSelectedEmployee(null);
   };
 
-  const tabs = useMemo(() => [
-    {
-      name: 'All Employees',
-      href: '#all-employees',
-      content: <AllEmployees initialData={employees} />,
-    },
-    {
-      name: 'Teams',
-      href: '#teams',
-      content: <TeamsTab initialData={teams} />,
-    }
-  ], [employees, teams]);
-
   const handleTabChange = (tab: TabItem) => {
-    if (typeof window !== 'undefined') window.history.pushState({}, '', tab.href);
+    if (typeof window !== 'undefined') {
+      setCurrentTab(tab.name);
+      window.history.pushState({}, '', tab.href);
+    }
   };
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const hash = window.location.hash;
-    const matchingTab = tabs.find(tab => tab.href === hash);
-    handleTabChange(matchingTab || tabs[0]);
-  }, [tabs]);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <>
@@ -141,7 +158,7 @@ export default function Home() {
       <div className="mx-6 mr-4 lg:mx-[51px] py-6">
         <Tabs 
           tabs={tabs}
-          defaultTab={tabs.find(tab => tab.href === window.location.hash)?.name || tabs[0].name}
+          defaultTab={currentTab}
           onTabChange={handleTabChange}
         />
       </div>

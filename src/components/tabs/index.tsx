@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 export interface TabItem {
   name: string;
@@ -19,7 +19,15 @@ function classNames(...classes: (string | boolean | null | undefined)[]) {
 }
 
 export default function Tabs({ tabs, defaultTab, onTabChange }: TabsProps) {
-  const [currentTab, setCurrentTab] = useState(defaultTab || tabs[0].name);
+  const initialTab = useMemo(() => {
+    return defaultTab || (tabs && tabs.length > 0 ? tabs[0].name : '');
+  }, [defaultTab, tabs]);
+
+  const [currentTab, setCurrentTab] = useState(initialTab);
+  
+  const activeTab = useMemo(() => {
+    return tabs.find(tab => tab.name === currentTab) || tabs[0];
+  }, [tabs, currentTab]);
 
   const handleTabChange = (tab: TabItem) => {
     setCurrentTab(tab.name);
@@ -32,6 +40,10 @@ export default function Tabs({ tabs, defaultTab, onTabChange }: TabsProps) {
       handleTabChange(tab);
     }
   };
+
+  if (!tabs || tabs.length === 0) {
+    return null;
+  }
 
   return (
     <div>
@@ -80,7 +92,7 @@ export default function Tabs({ tabs, defaultTab, onTabChange }: TabsProps) {
       </div>
 
       <div className="mt-4">
-        {tabs.find((tab) => tab.name === currentTab)?.content}
+        {activeTab?.content}
       </div>
     </div>
   );

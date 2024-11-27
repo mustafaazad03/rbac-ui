@@ -109,6 +109,7 @@ export function DropdownMenuContent({
 
   // Update position when trigger element moves or window resizes
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const updatePosition = () => {
       if (triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
